@@ -1,380 +1,1046 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Website Generator</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Goats – Basketball Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FF5C00;
+    --orange-light: #FF8A3D;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --card: #1A1A1A;
+    --gray: #888;
+    --light: #F0EDE8;
+    --white: #FFFFFF;
+  }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            max-width: 1000px;
-            width: 100%;
-        }
+  html { scroll-behavior: smooth; }
 
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
 
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--orange);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--orange);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s, width 0.2s, height 0.2s, border-color 0.2s;
+    opacity: 0.6;
+  }
+  body:hover .cursor { opacity: 1; }
 
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,92,0,0.15);
+    animation: fadeDown 0.8s ease both;
+  }
+  @keyframes fadeDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
 
-        .content {
-            padding: 40px;
-        }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--orange); }
 
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--orange); }
 
-        button {
-            padding: 12px 30px;
-            font-size: 1em;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
+  .nav-cart {
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    cursor: none;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .nav-cart:hover { background: var(--orange-light); }
+  .cart-count {
+    position: absolute; top: -8px; right: -8px;
+    background: var(--white); color: var(--black);
+    font-size: 11px; font-weight: 700;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 70% 50%, rgba(255,92,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
 
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-        }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,92,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,92,0,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
 
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
+  .hero-left { z-index: 2; animation: fadeUp 1s 0.3s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(40px); } to { opacity:1; transform: translateY(0); } }
 
-        .display-area {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 30px;
-            margin: 20px 0;
-            min-height: 200px;
-            border: 2px solid #e0e0e0;
-        }
+  .hero-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .hero-tag::before { content: ''; display: block; width: 40px; height: 1px; background: var(--orange); }
 
-        .random-fact {
-            font-size: 1.3em;
-            line-height: 1.6;
-            color: #333;
-            margin: 20px 0;
-        }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 9vw, 130px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+  }
+  .hero-title .accent { color: var(--orange); display: block; }
 
-        .random-quote {
-            font-size: 1.2em;
-            font-style: italic;
-            color: #667eea;
-            margin: 15px 0;
-            padding: 15px;
-            border-left: 4px solid #667eea;
-        }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--gray);
+    line-height: 1.7;
+    max-width: 420px;
+    margin-bottom: 40px;
+  }
 
-        .random-quote .author {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 10px;
-            font-style: normal;
-        }
+  .hero-btns { display: flex; gap: 16px; align-items: center; }
 
-        .random-joke {
-            font-size: 1.1em;
-            color: #333;
-            margin: 15px 0;
-        }
+  .btn-primary {
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    cursor: none;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); }
 
-        .random-color-box {
-            width: 200px;
-            height: 200px;
-            border-radius: 12px;
-            margin: 20px 0;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
+  .btn-ghost {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    cursor: none;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
 
-        .color-code {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-top: 10px;
-            font-family: monospace;
-        }
+  .hero-right {
+    z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    animation: fadeUp 1s 0.5s ease both;
+    position: relative;
+  }
 
-        .random-user {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
+  .hero-ball {
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #FF8A3D, #CC3D00 60%, #7A2400);
+    position: relative;
+    animation: float 4s ease-in-out infinite;
+    box-shadow: 0 40px 80px rgba(255,92,0,0.3), inset -30px -20px 40px rgba(0,0,0,0.4);
+  }
+  @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-20px) rotate(3deg);} }
 
-        .random-user img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid #667eea;
-        }
+  /* Basketball lines */
+  .hero-ball::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background:
+      linear-gradient(rgba(0,0,0,0.4) 1px, transparent 1px) center/100% 33.3%,
+      linear-gradient(90deg, rgba(0,0,0,0.4) 1px, transparent 1px) center/33.3% 100%;
+    clip-path: circle(50%);
+  }
+  .hero-ball::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.3);
+    clip-path: circle(50%);
+  }
 
-        .user-info {
-            flex: 1;
-        }
+  .hero-stats {
+    position: absolute; bottom: -20px; left: -40px;
+    display: flex; gap: 24px;
+  }
+  .hero-stat {
+    background: var(--card);
+    border: 1px solid rgba(255,92,0,0.2);
+    padding: 16px 24px;
+    text-align: center;
+  }
+  .hero-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--orange);
+    display: block;
+  }
+  .hero-stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
 
-        .user-info h3 {
-            color: #667eea;
-            margin-bottom: 5px;
-        }
+  /* TICKER */
+  .ticker {
+    background: var(--orange);
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex; gap: 60px;
+    animation: ticker 20s linear infinite;
+  }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .ticker-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--black);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .ticker-dot { width: 6px; height: 6px; background: var(--black); border-radius: 50%; flex-shrink: 0; }
 
-        .user-info p {
-            color: #666;
-            margin: 5px 0;
-        }
+  /* SECTION HEADERS */
+  .section { padding: 100px 60px; }
+  .section-header { margin-bottom: 60px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .section-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-tag::before { content: ''; display: block; width: 30px; height: 1px; background: var(--orange); }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  .see-all {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-decoration: none;
+    border-bottom: 1px solid var(--orange);
+    padding-bottom: 2px;
+    cursor: none;
+    transition: opacity 0.2s;
+  }
+  .see-all:hover { opacity: 0.7; }
 
-        .random-number {
-            font-size: 3em;
-            font-weight: bold;
-            color: #667eea;
-            text-align: center;
-            margin: 20px 0;
-        }
+  /* PRODUCTS GRID */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2px;
+  }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
+  .product-card {
+    background: var(--card);
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: transform 0.3s;
+  }
+  .product-card:hover { transform: translateY(-4px); }
+  .product-card:hover .product-img-wrap { transform: scale(1.05); }
+  .product-card:hover .product-overlay { opacity: 1; }
 
-        .stat-box {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            text-align: center;
-        }
+  .product-img-wrap {
+    aspect-ratio: 1;
+    background: #1F1F1F;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.4s;
+    overflow: hidden;
+    position: relative;
+  }
 
-        .stat-box h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
+  .product-emoji {
+    font-size: 80px;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    transition: transform 0.3s;
+  }
+  .product-card:hover .product-emoji { transform: scale(1.1) rotate(-5deg); }
 
-        .stat-box p {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #333;
-        }
+  .product-badge {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--orange);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+  }
 
-        footer {
-            background: #f0f0f0;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-        }
+  .product-overlay {
+    position: absolute; inset: 0;
+    background: rgba(255,92,0,0.08);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex; align-items: flex-end; padding: 20px;
+  }
 
-        @media (max-width: 600px) {
-            header h1 {
-                font-size: 1.8em;
-            }
+  .product-info { padding: 20px; }
+  .product-brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 4px;
+  }
+  .product-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--orange);
+  }
+  .product-old-price {
+    font-size: 14px;
+    color: var(--gray);
+    text-decoration: line-through;
+    margin-left: 8px;
+  }
 
-            .button-group {
-                flex-direction: column;
-            }
+  .add-btn {
+    width: 40px; height: 40px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .add-btn:hover { background: var(--orange); border-color: var(--orange); }
 
-            button {
-                width: 100%;
-            }
+  /* CATEGORIES */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
 
-            .random-user {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-    </style>
+  .cat-card {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    aspect-ratio: 4/3;
+    background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cat-card:first-child { grid-row: span 2; aspect-ratio: auto; }
+
+  .cat-emoji { font-size: 72px; transition: transform 0.4s; }
+  .cat-card:hover .cat-emoji { transform: scale(1.2) rotate(10deg); }
+
+  .cat-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+    display: flex; align-items: flex-end; padding: 24px;
+    transition: background 0.3s;
+  }
+  .cat-card:hover .cat-overlay { background: linear-gradient(to top, rgba(255,92,0,0.6) 0%, transparent 60%); }
+
+  .cat-info {}
+  .cat-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+  .cat-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* BANNER */
+  .banner {
+    margin: 0 60px;
+    background: var(--orange);
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner::before {
+    content: 'GOAT';
+    position: absolute;
+    right: 200px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    color: rgba(0,0,0,0.08);
+    letter-spacing: 10px;
+    pointer-events: none;
+  }
+  .banner-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 64px);
+    color: var(--black);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+  .banner-sub {
+    font-size: 15px;
+    color: rgba(0,0,0,0.6);
+    margin-top: 10px;
+  }
+  .btn-dark {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 18px 40px;
+    cursor: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-dark:hover { background: #222; }
+
+  /* BRANDS */
+  .brands-strip {
+    padding: 60px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .brands-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .brands-list {
+    display: flex;
+    gap: 60px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.15);
+    transition: color 0.3s;
+    cursor: none;
+  }
+  .brand-name:hover { color: var(--orange); }
+
+  /* TESTIMONIALS */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .testimonial {
+    background: var(--card);
+    padding: 40px;
+    position: relative;
+  }
+  .testimonial::before {
+    content: '"';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: var(--orange);
+    line-height: 1;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .testimonial-text {
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .testimonial-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .author-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--black);
+    flex-shrink: 0;
+  }
+  .author-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+  .author-title {
+    font-size: 12px;
+    color: var(--gray);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    padding: 80px 60px 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+  }
+  .footer-brand span { color: var(--orange); }
+  .footer-desc {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.7;
+    max-width: 280px;
+    margin-bottom: 24px;
+  }
+  .footer-col-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a {
+    font-size: 14px;
+    color: var(--gray);
+    text-decoration: none;
+    cursor: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--orange); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 30px;
+  }
+  .footer-copy {
+    font-size: 13px;
+    color: var(--gray);
+  }
+  .footer-copy span { color: var(--orange); }
+  .footer-socials { display: flex; gap: 16px; }
+  .social-btn {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    cursor: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .social-btn:hover { border-color: var(--orange); background: rgba(255,92,0,0.1); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--orange);
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 14px 24px;
+    z-index: 1000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ANIMATIONS */
+  .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.6s, transform 0.6s; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* NEWSLETTER */
+  .newsletter-wrap {
+    display: flex; gap: 0; max-width: 420px;
+  }
+  .newsletter-input {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-right: none;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    padding: 12px 16px;
+    outline: none;
+  }
+  .newsletter-input::placeholder { color: var(--gray); }
+  .newsletter-btn {
+    background: var(--orange);
+    border: none;
+    color: var(--black);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    cursor: none;
+    transition: background 0.2s;
+  }
+  .newsletter-btn:hover { background: var(--orange-light); }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; text-align: center; }
+    .hero-right { display: none; }
+    .hero-btns { justify-content: center; }
+    .section { padding: 60px 24px; }
+    .banner { margin: 0 24px; padding: 40px 24px; grid-template-columns: 1fr; }
+    .brands-strip { padding: 40px 24px; }
+    .categories-grid { grid-template-columns: 1fr 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 30px; }
+    footer { padding: 60px 24px 30px; }
+    .footer-bottom { flex-direction: column; gap: 20px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎲 Random Website</h1>
-            <p>Generate random content at the click of a button!</p>
-        </header>
 
-        <div class="content">
-            <div class="button-group">
-                <button class="btn-primary" onclick="generateFact()">Random Fact</button>
-                <button class="btn-primary" onclick="generateQuote()">Random Quote</button>
-                <button class="btn-primary" onclick="generateJoke()">Random Joke</button>
-                <button class="btn-primary" onclick="generateColor()">Random Color</button>
-                <button class="btn-primary" onclick="generateNumber()">Random Number</button>
-            </div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-            <div class="display-area" id="displayArea">
-                <p style="color: #999; text-align: center;">Click a button above to generate random content!</p>
-            </div>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">THE <span>GOATS</span></a>
+  <ul class="nav-links">
+    <li><a href="#products">Shop</a></li>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#brands">Brands</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+  </ul>
+  <button class="nav-cart" id="cartBtn">
+    Cart
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
 
-            <div class="stats">
-                <div class="stat-box">
-                    <h4>Total Generations</h4>
-                    <p id="statCount">0</p>
-                </div>
-                <div class="stat-box">
-                    <h4>Last Generated</h4>
-                    <p id="statLast">-</p>
-                </div>
-                <div class="stat-box">
-                    <h4>Your Luck</h4>
-                    <p id="statLuck">🍀</p>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            <p>© 2026 Random Website by Raj, Prahlad & Saarthak | Have Fun! 🎉</p>
-        </footer>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-left">
+    <div class="hero-tag">New Season 2026 Drop</div>
+    <h1 class="hero-title">
+      Built For
+      <span class="accent">Legends</span>
+    </h1>
+    <p class="hero-desc">Premium basketball gear for players who demand more. Shoes, jerseys, and equipment trusted by pros. Your game starts here.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Shop Now</a>
+      <a href="#categories" class="btn-ghost">Explore</a>
     </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-ball"></div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">500+</span>
+        <span class="hero-stat-label">Products</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">50K+</span>
+        <span class="hero-stat-label">Players</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">10+</span>
+        <span class="hero-stat-label">Top Brands</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        let generationCount = 0;
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="tickerInner"></div>
+</div>
 
-        // Random Facts
-        const facts = [
-            "Honey never spoils. Archaeologists have found 3000-year-old honey in Egyptian tombs!",
-            "A group of flamingos is called a 'flamboyance'.",
-            "Octopuses have three hearts and blue blood.",
-            "The shortest war in history lasted only 38 minutes.",
-            "Bananas are berries, but strawberries are not!",
-            "A day on Venus is longer than a year on Venus.",
-            "Wombats have cube-shaped poop.",
-            "Cats have over 20 vocalizations to communicate.",
-            "The Great Wall of China isn't visible from space.",
-            "Cleopatra lived closer to the moon landing than to the pyramids' construction."
-        ];
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-tag">Featured Drops</div>
+      <h2 class="section-title">Hot Right Now</h2>
+    </div>
+    <a href="#" class="see-all">See All →</a>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
 
-        // Random Quotes
-        const quotes = [
-            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
-            { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
-            { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
-            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
-            { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle" },
-            { text: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt" },
-            { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
-            { text: "Success is not final, failure is not fatal.", author: "Winston Churchill" }
-        ];
+<!-- CATEGORIES -->
+<section class="section" id="categories" style="background: #0E0E0E;">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-tag">Browse</div>
+      <h2 class="section-title">Shop By Category</h2>
+    </div>
+  </div>
+  <div class="categories-grid fade-in">
+    <div class="cat-card">
+      <div class="cat-emoji">👟</div>
+      <div class="cat-overlay">
+        <div class="cat-info">
+          <div class="cat-name">Basketball Shoes</div>
+          <div class="cat-count">142 products</div>
+        </div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-emoji">🏀</div>
+      <div class="cat-overlay">
+        <div class="cat-info">
+          <div class="cat-name">Basketballs</div>
+          <div class="cat-count">58 products</div>
+        </div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-emoji">🎽</div>
+      <div class="cat-overlay">
+        <div class="cat-info">
+          <div class="cat-name">Jerseys</div>
+          <div class="cat-count">87 products</div>
+        </div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-emoji">🧤</div>
+      <div class="cat-overlay">
+        <div class="cat-info">
+          <div class="cat-name">Accessories</div>
+          <div class="cat-count">215 products</div>
+        </div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-emoji">🩳</div>
+      <div class="cat-overlay">
+        <div class="cat-info">
+          <div class="cat-name">Shorts</div>
+          <div class="cat-count">63 products</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Random Jokes
-        const jokes = [
-            "Why don't scientists trust atoms? Because they make up everything!",
-            "Why did the scarecrow win an award? He was outstanding in his field!",
-            "What do you call fake spaghetti? An impasta!",
-            "Why don't eggs tell jokes? They'd crack each other up!",
-            "What did the ocean say to the beach? Nothing, it just waved!",
-            "Why can't you give Elsa a balloon? Because she'll let it go!",
-            "What do you call a bear with no teeth? A gummy bear!",
-            "Why did the math book look sad? Because it had too many problems!"
-        ];
+<!-- BANNER -->
+<div class="banner fade-in" style="margin-top: 100px;">
+  <div>
+    <div class="banner-title">Members Get<br>20% Off Everything</div>
+    <div class="banner-sub">Join The Goats Club today. Free shipping on all orders.</div>
+  </div>
+  <a href="#" class="btn-dark">Join The Club</a>
+</div>
 
-        function updateStats(type) {
-            generationCount++;
-            document.getElementById('statCount').textContent = generationCount;
-            document.getElementById('statLast').textContent = type;
-            document.getElementById('statLuck').textContent = ['🍀', '🎲', '✨', '🎯', '🌟'][Math.floor(Math.random() * 5)];
-        }
+<!-- BRANDS -->
+<div class="brands-strip fade-in" id="brands">
+  <div class="brands-label">Trusted Brands We Carry</div>
+  <div class="brands-list">
+    <div class="brand-name">Nike</div>
+    <div class="brand-name">Jordan</div>
+    <div class="brand-name">Adidas</div>
+    <div class="brand-name">Puma</div>
+    <div class="brand-name">Under Armour</div>
+    <div class="brand-name">New Balance</div>
+    <div class="brand-name">Spalding</div>
+  </div>
+</div>
 
-        function generateFact() {
-            const fact = facts[Math.floor(Math.random() * facts.length)];
-            document.getElementById('displayArea').innerHTML = `<div class="random-fact">📚 ${fact}</div>`;
-            updateStats('Fact');
-        }
+<!-- TESTIMONIALS -->
+<section class="section" id="testimonials">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-tag">Reviews</div>
+      <h2 class="section-title">Players Love Us</h2>
+    </div>
+  </div>
+  <div class="testimonials-grid fade-in">
+    <div class="testimonial">
+      <div class="testimonial-text">These shoes completely changed my game. The ankle support and grip on the court is insane. Never going back to any other store.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">KD</div>
+        <div>
+          <div class="author-name">Kevin D.</div>
+          <div class="author-title">Point Guard, Chicago</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-text">Ordered a jersey on Monday, had it by Wednesday. The quality is legit — feels exactly like what the pros wear. The Goats is the real deal.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">MJ</div>
+        <div>
+          <div class="author-name">Marcus J.</div>
+          <div class="author-title">Small Forward, NYC</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-text">Finally a basketball store that actually knows the game. The staff recommendations were spot on and the gear is top tier. 10/10 every time.</div>
+      <div class="testimonial-author">
+        <div class="author-avatar">SB</div>
+        <div>
+          <div class="author-name">Simone B.</div>
+          <div class="author-title">Center, LA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function generateQuote() {
-            const quote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById('displayArea').innerHTML = `
-                <div class="random-quote">
-                    "${quote.text}"
-                    <div class="author">— ${quote.author}</div>
-                </div>
-            `;
-            updateStats('Quote');
-        }
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">THE <span>GOATS</span></div>
+      <p class="footer-desc">Premium basketball gear for every level of player. From the blacktop to the big league — we got you.</p>
+      <div class="newsletter-wrap">
+        <input type="email" class="newsletter-input" placeholder="Your email address">
+        <button class="newsletter-btn">Subscribe</button>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <ul class="footer-links">
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Shoes</a></li>
+        <li><a href="#">Jerseys</a></li>
+        <li><a href="#">Basketballs</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Sale</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Info</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Store Locator</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Support</div>
+      <ul class="footer-links">
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 <span>The Goats</span>. All rights reserved.</div>
+    <div class="footer-socials">
+      <div class="social-btn">𝕏</div>
+      <div class="social-btn">in</div>
+      <div class="social-btn">ig</div>
+      <div class="social-btn">▶</div>
+    </div>
+  </div>
+</footer>
 
-        function generateJoke() {
-            const joke = jokes[Math.floor(Math.random() * jokes.length)];
-            document.getElementById('displayArea').innerHTML = `<div class="random-joke">😂 ${joke}</div>`;
-            updateStats('Joke');
-        }
+<div class="toast" id="toast">Added to cart!</div>
 
-        function generateColor() {
-            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('displayArea').innerHTML = `
-                <div>
-                    <div class="random-color-box" style="background: ${color};"></div>
-                    <div class="color-code">Color: ${color}</div>
-                </div>
-            `;
-            updateStats('Color');
-        }
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  });
 
-        function generateNumber() {
-            const number = Math.floor(Math.random() * 1000000);
-            const lucky = Math.floor(Math.random() * 100) + 1;
-            document.getElementById('displayArea').innerHTML = `
-                <div>
-                    <div class="random-number">${number}</div>
-                    <div class="stats">
-                        <div class="stat-box">
-                            <h4>Your Lucky Number</h4>
-                            <p>${lucky}</p>
-                        </div>
-                        <div class="stat-box">
-                            <h4>Random % Chance</h4>
-                            <p>${Math.floor(Math.random() * 100)}%</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            updateStats('Number');
-        }
-    </script>
+  // Products data
+  const products = [
+    { emoji: '👟', brand: 'Nike', name: 'Air Zoom GT Cut 3', price: 189, old: 220, badge: 'New' },
+    { emoji: '🏀', brand: 'Spalding', name: 'NBA Official Game Ball', price: 149, old: null, badge: 'Best Seller' },
+    { emoji: '🎽', brand: 'Jordan', name: 'Statement Jersey Pro', price: 119, old: 149, badge: 'Sale' },
+    { emoji: '👟', brand: 'Adidas', name: 'Harden Vol. 8', price: 169, old: null, badge: 'New' },
+    { emoji: '🧤', brand: 'Under Armour', name: 'Grip Training Gloves', price: 45, old: 60, badge: 'Sale' },
+    { emoji: '🩳', brand: 'Nike', name: 'Dri-FIT Elite Shorts', price: 65, old: null, badge: null },
+    { emoji: '👟', brand: 'Puma', name: 'Stewie 2 Team', price: 135, old: 160, badge: 'Hot' },
+    { emoji: '🏅', brand: 'New Balance', name: 'Two WXY v4', price: 145, old: null, badge: 'New' },
+  ];
+
+  const grid = document.getElementById('productsGrid');
+  let cart = 0;
+
+  products.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'product-card fade-in';
+    card.style.transitionDelay = `${i * 0.07}s`;
+    card.innerHTML = `
+      <div class="product-img-wrap">
+        <span class="product-emoji">${p.emoji}</span>
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+        <div class="product-overlay"></div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-footer">
+          <div>
+            <span class="product-price">$${p.price}</span>
+            ${p.old ? `<span class="product-old-price">$${p.old}</span>` : ''}
+          </div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  function addToCart(btn) {
+    cart++;
+    document.getElementById('cartCount').textContent = cart;
+    btn.textContent = '✓';
+    btn.style.background = 'var(--orange)';
+    btn.style.borderColor = 'var(--orange)';
+    setTimeout(() => { btn.textContent = '+'; btn.style.background = ''; btn.style.borderColor = ''; }, 1200);
+    showToast();
+  }
+
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  // Ticker
+  const tickerItems = ['Free Shipping Over $75', 'New Arrivals Every Week', 'Members Save 20%', 'Official NBA Gear', 'Top Brands In Stock', '500+ Products', 'Trusted By 50,000+ Players'];
+  const ticker = document.getElementById('tickerInner');
+  const full = [...tickerItems, ...tickerItems].map(t => `<span class="ticker-item"><span class="ticker-dot"></span>${t}</span>`).join('');
+  ticker.innerHTML = full + full;
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
