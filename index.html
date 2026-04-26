@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Website Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .display-area {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            min-height: 200px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .random-fact {
+            font-size: 1.3em;
+            line-height: 1.6;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .random-quote {
+            font-size: 1.2em;
+            font-style: italic;
+            color: #667eea;
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .random-quote .author {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 10px;
+            font-style: normal;
+        }
+
+        .random-joke {
+            font-size: 1.1em;
+            color: #333;
+            margin: 15px 0;
+        }
+
+        .random-color-box {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .color-code {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 10px;
+            font-family: monospace;
+        }
+
+        .random-user {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .random-user img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #667eea;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-info h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .random-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .stat-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-box p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        footer {
+            background: #f0f0f0;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .random-user {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎲 Random Website</h1>
+            <p>Generate random content at the click of a button!</p>
+        </header>
+
+        <div class="content">
+            <div class="button-group">
+                <button class="btn-primary" onclick="generateFact()">Random Fact</button>
+                <button class="btn-primary" onclick="generateQuote()">Random Quote</button>
+                <button class="btn-primary" onclick="generateJoke()">Random Joke</button>
+                <button class="btn-primary" onclick="generateColor()">Random Color</button>
+                <button class="btn-primary" onclick="generateNumber()">Random Number</button>
+            </div>
+
+            <div class="display-area" id="displayArea">
+                <p style="color: #999; text-align: center;">Click a button above to generate random content!</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <h4>Total Generations</h4>
+                    <p id="statCount">0</p>
+                </div>
+                <div class="stat-box">
+                    <h4>Last Generated</h4>
+                    <p id="statLast">-</p>
+                </div>
+                <div class="stat-box">
+                    <h4>Your Luck</h4>
+                    <p id="statLuck">🍀</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Random Website by Raj, Prahlad & Saarthak | Have Fun! 🎉</p>
+        </footer>
+    </div>
+
+    <script>
+        let generationCount = 0;
+
+        // Random Facts
+        const facts = [
+            "Honey never spoils. Archaeologists have found 3000-year-old honey in Egyptian tombs!",
+            "A group of flamingos is called a 'flamboyance'.",
+            "Octopuses have three hearts and blue blood.",
+            "The shortest war in history lasted only 38 minutes.",
+            "Bananas are berries, but strawberries are not!",
+            "A day on Venus is longer than a year on Venus.",
+            "Wombats have cube-shaped poop.",
+            "Cats have over 20 vocalizations to communicate.",
+            "The Great Wall of China isn't visible from space.",
+            "Cleopatra lived closer to the moon landing than to the pyramids' construction."
+        ];
+
+        // Random Quotes
+        const quotes = [
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+            { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+            { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+            { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle" },
+            { text: "Do what you can, with what you have, where you are.", author: "Theodore Roosevelt" },
+            { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+            { text: "Success is not final, failure is not fatal.", author: "Winston Churchill" }
+        ];
+
+        // Random Jokes
+        const jokes = [
+            "Why don't scientists trust atoms? Because they make up everything!",
+            "Why did the scarecrow win an award? He was outstanding in his field!",
+            "What do you call fake spaghetti? An impasta!",
+            "Why don't eggs tell jokes? They'd crack each other up!",
+            "What did the ocean say to the beach? Nothing, it just waved!",
+            "Why can't you give Elsa a balloon? Because she'll let it go!",
+            "What do you call a bear with no teeth? A gummy bear!",
+            "Why did the math book look sad? Because it had too many problems!"
+        ];
+
+        function updateStats(type) {
+            generationCount++;
+            document.getElementById('statCount').textContent = generationCount;
+            document.getElementById('statLast').textContent = type;
+            document.getElementById('statLuck').textContent = ['🍀', '🎲', '✨', '🎯', '🌟'][Math.floor(Math.random() * 5)];
+        }
+
+        function generateFact() {
+            const fact = facts[Math.floor(Math.random() * facts.length)];
+            document.getElementById('displayArea').innerHTML = `<div class="random-fact">📚 ${fact}</div>`;
+            updateStats('Fact');
+        }
+
+        function generateQuote() {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('displayArea').innerHTML = `
+                <div class="random-quote">
+                    "${quote.text}"
+                    <div class="author">— ${quote.author}</div>
+                </div>
+            `;
+            updateStats('Quote');
+        }
+
+        function generateJoke() {
+            const joke = jokes[Math.floor(Math.random() * jokes.length)];
+            document.getElementById('displayArea').innerHTML = `<div class="random-joke">😂 ${joke}</div>`;
+            updateStats('Joke');
+        }
+
+        function generateColor() {
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('displayArea').innerHTML = `
+                <div>
+                    <div class="random-color-box" style="background: ${color};"></div>
+                    <div class="color-code">Color: ${color}</div>
+                </div>
+            `;
+            updateStats('Color');
+        }
+
+        function generateNumber() {
+            const number = Math.floor(Math.random() * 1000000);
+            const lucky = Math.floor(Math.random() * 100) + 1;
+            document.getElementById('displayArea').innerHTML = `
+                <div>
+                    <div class="random-number">${number}</div>
+                    <div class="stats">
+                        <div class="stat-box">
+                            <h4>Your Lucky Number</h4>
+                            <p>${lucky}</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>Random % Chance</h4>
+                            <p>${Math.floor(Math.random() * 100)}%</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            updateStats('Number');
+        }
+    </script>
+</body>
+</html>
